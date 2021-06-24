@@ -18,5 +18,7 @@ studies:
     vcflist: "mopmap-updatedEA/mopmap-updatedEA"
   whims:
     vcflist: "whims-updatedEA/whims-updatedEA"
+  gecco:
+    vcflist: "gecco-updatedEA/gecco-updatedEA"
   hchs:
     vcflist: "MEGA_HCHS_SOL/MEGA_HCHS_SOL"

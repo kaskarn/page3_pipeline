@@ -17,7 +17,7 @@ geno_dir=$this_dir/geno
 page="pageiii"
 outdir="."
 
-#help
+#halp
 if [ $# -lt 1 ]
 then
   echo -e '
@@ -109,12 +109,12 @@ shift
 done
 
 #debugging output
-if [[ ! -z "$test" ]]; then
-  echo $this_path
-  echo $this_dir
-  echo $geno_dir
-  echo $pheno_dir
-fi
+# if [[ ! -z "$test" ]]; then
+#   echo $this_path
+#   echo $this_dir
+#   echo $geno_dir
+#   echo $pheno_dir
+# fi
 
 #if trait is file containing traits, then run once for each trait within
 if [[ -f $trait ]]; then
@@ -201,6 +201,7 @@ resdir="$dir_out/res"
 ymlout="$dir_out/summary.yml"
 echo "#This file describes analyses submitted from this directory, and can be used as pipeline input to recreate them" > $ymlout
 echo "#See pipeline documentation" >> $ymlout
+echo "cmd: "'"'$cmd'"' >> $ymlout
 echo "page: $page" >> $ymlout
 echo "pheno: $pheno" >> $ymlout
 echo "id: $id" >> $ymlout
@@ -221,7 +222,7 @@ pidlist=""
 for f in $vcflist; do
   fn=`basename $f`
   echo "$trait: Submitting $fn"
-  sout=` sbatch -o $logsdir/log_${study}__${trait}.log --wrap="$sugen --pheno $pheno_file --id-col $id --family-col $fid --vcf $f --formula $formula --unweighted --out-prefix $resdir/${study}__${trait}__$fn --dosage" `
+  sout=` sbatch -o $logsdir/log_${study}__${trait}.log -t2-0 --mem=4GB --wrap="$sugen --pheno $pheno_file --id-col $id --family-col $fid --vcf $f --formula $formula --unweighted --out-prefix $resdir/${study}__${trait}__$fn --dosage" `
   pid=`grep -o '[0-9]\+$' <(echo $sout)`
   pidlist="$pidlist $pid"
   echo "  - $f" >> $ymlout

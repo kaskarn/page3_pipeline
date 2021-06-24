@@ -32,7 +32,7 @@ studies:
       - sol_center_s
       - sol_center_c
       - sex_female
-  mega_all:
+  mega:
     covars:
       - whi_regnum_1
       - whi_regnum_2
@@ -57,11 +57,6 @@ studies:
       - whi_regnum_2
       - whi_regnum_3
   hipfx:
-    covars:
-      - whi_regnum_1
-      - whi_regnum_2
-      - whi_regnum_3
-  garnet:
     covars:
       - whi_regnum_1
       - whi_regnum_2

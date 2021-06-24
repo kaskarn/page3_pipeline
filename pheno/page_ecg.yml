@@ -1,0 +1,73 @@
+name: page_ecg
+select: ""
+description: Antoine dissertation phenotype file
+path: /proj/epi/CVDGeneNas/antoine/dissertation/phenotypes/ECG/ready/ecg_finalized_forsugen_aric_ea_gwas_frz3.txt
+pageiii:
+  id: pageiii_analysis_id
+  fid: analysis_fid
+pageii:
+  id: analysis_id
+  fid: analysis_fid
+pc_prefix: ev
+
+#covariates to adjust for (in addition to PCs if prefix is set above)
+covars:
+  - age_at_ecg
+studies:
+  aric_ea:
+    covars:
+      - aric_site_m
+      - aric_site_f
+      - sex_female
+  aric_aa:
+    covars:
+      - aric_site_f
+      - sex_female
+  hchs:
+    covars:
+      - sol_center_m
+      - sol_center_s
+      - sol_center_c
+      - sex_female
+  mega_all:
+    covars:
+      - sol_center_m
+      - sol_center_s
+      - sol_center_c
+      - sex_female
+  garnet:
+    covars:
+      - whi_regnum_1
+      - whi_regnum_2
+      - whi_regnum_3
+  whims:
+    covars:
+      - whi_regnum_1
+      - whi_regnum_2
+      - whi_regnum_3
+  gecco:
+    covars:
+      - whi_regnum_1
+      - whi_regnum_2
+      - whi_regnum_3
+  hipfx:
+    covars:
+      - whi_regnum_1
+      - whi_regnum_2
+      - whi_regnum_3
+  garnet:
+    covars:
+      - whi_regnum_1
+      - whi_regnum_2
+      - whi_regnum_3
+  mopmap:
+    covars:
+      - whi_regnum_1
+      - whi_regnum_2
+      - whi_regnum_3
+traits:
+  epicare_qtdur:
+    model: linear
+    covars:
+      - rr_d
+           

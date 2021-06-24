@@ -1,3 +1,22 @@
-path: "/proj/epi/Genetic_Data_Center/calico/PAGEIII/GWAS_TOPMedFreeze8Imputed/finalized/"
-aric_ea:
-  vcflist: ARIC_EA_gwas_frz3/ARIC_EA_gwas_frz3
+path: "/proj/epi/Genetic_Data_Center/calico/PAGEIII/GWAS_TOPMedFreeze8Imputed/finalized"
+studies:
+  aric_ea:
+    vcflist: "ARIC_EA_gwas_frz3/ARIC_EA_gwas_frz3"
+  aric_aa:
+    vcflist: "ARIC_AA_gwas_frz3/ARIC_AA_gwas_frz3"
+  mega:
+    vcflist: "MEGA_all/MEGA_all"
+  mega_aa:
+    vcflist: "MEGA_AA/MEGA_AA"
+  mega_ha:
+    vcflist: "MEGA_HA/MEGA_HA"
+  garnet:
+    vcflist: "garnet-updated/garnet-updated"
+  hipfx:
+    vcflist: "hipfx-updated/hipfx-updated"
+  mopmap:
+    vcflist: "mopmap-updatedEA/mopmap-updatedEA"
+  whims:
+    vcflist: "whims-updatedEA/whims-updatedEA"
+  hchs:
+    vcflist: "MEGA_HCHS_SOL/MEGA_HCHS_SOL"

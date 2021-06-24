@@ -7,14 +7,55 @@ sugen="/nas02/depts/epi/CVDGeneNas/sol/taor/SUGEN_github/SUGEN/SUGEN"
 cmd="$0 $@"
 
 #set relative program directories
-pipe_dir="$(dirname "$0")"
+
 this_path="$(realpath $0)"
-pheno_dir=$pipe_dir/pheno
-geno_dir=$pipe_dir/geno
+this_dir="$(dirname $this_path)"
+pheno_dir=$this_dir/pheno
+geno_dir=$this_dir/geno
 
 #defaults
 page="pageiii"
 outdir="."
+
+#help
+if [ $# -lt 1 ]
+then
+  echo -e '
+
+  SUGEN / SLURM wrapper for PAGE GWAS
+  (Antoine Baldassari -- baldassa@email.unc.edu)
+  
+  USAGE
+  bash psub.sh --study studyname --pheno phenoname --trait traitname [--outdir out --covars varlist --test --pageii]
+
+  REQUIRED ARGUMENTS
+  --study STUDY : Study name  
+  One of: whims, garnet, gecco, hipfx, mopmap, aric_aa, aric_ea, mega_all, mega_aa, mega_ha
+
+  --trait TRAIT : Single trait name, or file listing one trait name per line
+  Example: "--trait qt_duration"; "--trait mytraits.txt"
+
+  --pheno PHEN : Phenotype file, or YAML specification file (with, or without the .yml extension)
+  Phenotype file specifications are yml-formatted files contained in ./pheno,
+  relative to this script. These files specify covariate adjustments,
+  id names, study- or trait- specific covariates, trait models, and others. See ./page_ecg.yml
+  for an example.
+  Examples: 
+    --pheno page_ecg ... (use Antoine'"'"'s ECG phenotype file, described in ./page_ecg.yml)
+
+  OPTIONAL ARGUMENTS
+  -h | --help:  print this manual and exit
+
+  --covars COVARS: quoted list of space-delimited covariates overriding phenotype specification
+  Example: --covars "age bmi pc1 pc2"
+
+  --pageii : Use PAGE II genotypes instead of PAGE III
+  --test : Set up only; does not run SUGEN
+  --test1 : Only run the first CHR
+
+'
+  exit
+fi
 
 #parsing
 while [[ $# -gt 0 ]]
@@ -54,6 +95,10 @@ case $1 in
   test1=true
   outdir="test"
   ;;
+  -h|--help)
+  bash $0
+  exit
+  ;;
   *)
   echo "Unknown option $1"
   exit
@@ -63,12 +108,19 @@ esac
 shift
 done
 
-#if trait is file containing traits, then run once for each line
+#debugging output
+if [[ ! -z "$test" ]]; then
+  echo $this_path
+  echo $this_dir
+  echo $geno_dir
+  echo $pheno_dir
+fi
+
+#if trait is file containing traits, then run once for each trait within
 if [[ -f $trait ]]; then
   this_script="$(realpath $0)"
   while read t; do
-    [[ -z "$t" ]] && exit
-    bash $cmd --trait $t
+    [[ -z "$t" ]] || bash $cmd --trait $t
   done < $trait
   exit
 fi
@@ -90,6 +142,7 @@ fi
 
 #set covariates
 if [[ -z $covars_cmd ]]; then
+
   covars_s=` yq eval .studies.$study.covars[] $pheno `
   covars_f=` yq eval .covars[] $pheno `
   covars_t=` yq eval .traits.$trait.covars[] $pheno`
@@ -104,6 +157,12 @@ if [[ -z $covars_cmd ]]; then
 else
   covars=$covars_cmd
 fi
+
+#set model
+model="linear"
+model_y=` yq eval .traits.$trait.model $pheno`
+[[ "$model_y" == "null" ]] || model=$model_y
+
 
 #set participant id column
 if [[ -z $id_cmd ]]; then
@@ -125,7 +184,7 @@ formula="${trait}=$eqn_rhs"
 
 #set list of vcf files to loop through
 basedir=`yq eval .path $geno_dir/${page}_geno.yml `
-vcflist=$basedir/`yq eval .$study.vcflist $geno_dir/${page}_geno.yml`*.vcf.gz
+vcflist=$basedir/`yq eval .studies.$study.vcflist $geno_dir/${page}_geno.yml`*.vcf.gz
 
 #set output location
 dir_out="$outdir/$study/$trait"
@@ -149,6 +208,7 @@ echo "fid: $fid" >> $ymlout
 echo "formula: $formula" >> $ymlout
 echo "basedir: $basedir" >> $ymlout
 echo "date: \"`date`\"" >> $ymlout
+echo "model: $model" >> $ymlout
 
 [[ "$test" == true ]] && exit
 

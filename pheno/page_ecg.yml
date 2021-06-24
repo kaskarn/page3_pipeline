@@ -1,7 +1,7 @@
 name: page_ecg
 select: ""
 description: Antoine dissertation phenotype file
-path: /proj/epi/CVDGeneNas/antoine/dissertation/phenotypes/ECG/ready/ecg_finalized_forsugen_aric_ea_gwas_frz3.txt
+path: /proj/epi/CVDGeneNas/antoine/dissertation/phenotypes/ECG/ready/ecg_finalized_forsugen_all.txt
 pageiii:
   id: pageiii_analysis_id
   fid: analysis_fid
@@ -10,9 +10,12 @@ pageii:
   fid: analysis_fid
 pc_prefix: ev
 
-#covariates to adjust for (in addition to PCs if prefix is set above)
+#covariates in all modles (in addition to PCs if prefix is set above)
 covars:
-  - age_at_ecg
+  - age
+  - age2
+
+#study-specific covariates
 studies:
   aric_ea:
     covars:
@@ -21,7 +24,7 @@ studies:
       - sex_female
   aric_aa:
     covars:
-      - aric_site_f
+      - aric_site_j
       - sex_female
   hchs:
     covars:
@@ -31,6 +34,9 @@ studies:
       - sex_female
   mega_all:
     covars:
+      - whi_regnum_1
+      - whi_regnum_2
+      - whi_regnum_3
       - sol_center_m
       - sol_center_s
       - sol_center_c
@@ -65,9 +71,10 @@ studies:
       - whi_regnum_1
       - whi_regnum_2
       - whi_regnum_3
+
+#additional trait specs (models and covariates)
 traits:
   epicare_qtdur:
-    model: linear
     covars:
       - rr_d
            

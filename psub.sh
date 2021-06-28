@@ -222,7 +222,7 @@ pidlist=""
 for f in $vcflist; do
   fn=`basename $f`
   echo "$trait: Submitting $fn"
-  sout=` sbatch -o $logsdir/log_${study}__${trait}.log -t2-0 --mem=4GB --wrap="$sugen --pheno $pheno_file --id-col $id --family-col $fid --vcf $f --formula $formula --unweighted --out-prefix $resdir/${study}__${trait}__$fn --dosage" `
+  sout=` sbatch -o $logsdir/log_${study}__${trait}.log -t4-0 --mem=4GB --wrap="$sugen --pheno $pheno_file --id-col $id --family-col $fid --vcf $f --formula $formula --unweighted --out-prefix $resdir/${study}__${trait}__$fn --dosage" `
   pid=`grep -o '[0-9]\+$' <(echo $sout)`
   pidlist="$pidlist $pid"
   echo "  - $f" >> $ymlout
